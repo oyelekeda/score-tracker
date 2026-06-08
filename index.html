@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Score Tracker</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
+
   <body class="bg-gray-100 min-h-screen flex justify-center items-center">
     <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md">
       <h1 class="text-3xl font-bold text-center mb-6 text-blue-600">
@@ -16,7 +17,7 @@
       <ul id="studentList" class="space-y-3"></ul>
 
       <button
-        id="showBtn"
+        id="toggleBtn"
         class="w-full bg-blue-500 text-white py-2 rounded-lg mt-4 hover:bg-blue-600 transition"
       >
         Show Passed Students Only
@@ -41,12 +42,14 @@
 
       const studentList = document.getElementById("studentList");
       const summary = document.getElementById("summary");
-      const showBtn = document.getElementById("showBtn");
+      const toggleBtn = document.getElementById("toggleBtn");
 
-      function displayStudents(studentResult) {
+      let showingPassed = false;
+
+      function displayStudents(list) {
         studentList.innerHTML = "";
 
-        studentResult.forEach((student) => {
+        list.forEach((student) => {
           const li = document.createElement("li");
 
           li.textContent = `${student.name} — ${student.score} points`;
@@ -64,26 +67,40 @@
       }
 
       function showSummary() {
-        const passedStudents = students.filter(
-          (student) => student.score >= 50,
-        );
+        const passed = students.filter((student) => student.score >= 50);
 
         const names = students.map((student) => student.name);
 
         console.log(`Students: ${names.join(", ")}`);
 
-        summary.textContent = `${passedStudents.length} out of ${students.length} students passed`;
+        summary.textContent = `${passed.length} out of ${students.length} students passed`;
       }
 
       displayStudents(students);
       showSummary();
 
-      showBtn.addEventListener("click", () => {
-        const passedStudents = students.filter(
-          (student) => student.score >= 50,
-        );
+      toggleBtn.addEventListener("click", () => {
+        if (!showingPassed) {
+          const passedStudents = students.filter(
+            (student) => student.score >= 50,
+          );
 
-        displayStudents(passedStudents);
+          displayStudents(passedStudents);
+
+          toggleBtn.textContent = "Show All Students";
+          toggleBtn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+          toggleBtn.classList.add("bg-green-500", "hover:bg-green-600");
+
+          showingPassed = true;
+        } else {
+          displayStudents(students);
+
+          toggleBtn.textContent = "Show Passed Students Only";
+          toggleBtn.classList.remove("bg-green-500", "hover:bg-green-600");
+          toggleBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
+
+          showingPassed = false;
+        }
       });
     </script>
   </body>
