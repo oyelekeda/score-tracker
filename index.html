@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Score Tracker</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex justify-center items-center">
+    <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md">
+      <h1 class="text-3xl font-bold text-center mb-6 text-blue-600">
+        Student Score Tracker
+      </h1>
+
+      <ul id="studentList" class="space-y-3"></ul>
+
+      <button
+        id="showBtn"
+        class="w-full bg-blue-500 text-white py-2 rounded-lg mt-4 hover:bg-blue-600 transition"
+      >
+        Show Passed Students Only
+      </button>
+
+      <p id="summary" class="mt-4 text-center font-semibold text-gray-700"></p>
+    </div>
+
+    <script>
+      const students = [
+        { name: "Daniel", score: 45 },
+        { name: "Fawaz", score: 82 },
+        { name: "Baqi", score: 60 },
+        { name: "Clinton", score: 38 },
+        { name: "David", score: 71 },
+        { name: "Paul", score: 48 },
+        { name: "Mubarak", score: 62 },
+        { name: "Aashia", score: 90 },
+        { name: "Quarid", score: 80 },
+        { name: "Bobola", score: 95 },
+      ];
+
+      const studentList = document.getElementById("studentList");
+      const summary = document.getElementById("summary");
+      const showBtn = document.getElementById("showBtn");
+
+      function displayStudents(studentResult) {
+        studentList.innerHTML = "";
+
+        studentResult.forEach((student) => {
+          const li = document.createElement("li");
+
+          li.textContent = `${student.name} — ${student.score} points`;
+
+          li.classList.add("p-3", "rounded-lg", "font-medium");
+
+          if (student.score >= 50) {
+            li.classList.add("bg-green-100", "text-green-700");
+          } else {
+            li.classList.add("bg-red-100", "text-red-700");
+          }
+
+          studentList.appendChild(li);
+        });
+      }
+
+      function showSummary() {
+        const passedStudents = students.filter(
+          (student) => student.score >= 50,
+        );
+
+        const names = students.map((student) => student.name);
+
+        console.log(`Students: ${names.join(", ")}`);
+
+        summary.textContent = `${passedStudents.length} out of ${students.length} students passed`;
+      }
+
+      displayStudents(students);
+      showSummary();
+
+      showBtn.addEventListener("click", () => {
+        const passedStudents = students.filter(
+          (student) => student.score >= 50,
+        );
+
+        displayStudents(passedStudents);
+      });
+    </script>
+  </body>
+</html>
