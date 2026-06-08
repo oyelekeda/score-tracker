@@ -17,7 +17,7 @@
       <ul id="studentList" class="space-y-3"></ul>
 
       <button
-        id="toggleBtn"
+        id="changeBtn"
         class="w-full bg-blue-500 text-white py-2 rounded-lg mt-4 hover:bg-blue-600 transition"
       >
         Show Passed Students Only
@@ -42,7 +42,7 @@
 
       const studentList = document.getElementById("studentList");
       const summary = document.getElementById("summary");
-      const toggleBtn = document.getElementById("toggleBtn");
+      const changeBtn = document.getElementById("changeBtn");
 
       let showingPassed = false;
 
@@ -79,7 +79,7 @@
       displayStudents(students);
       showSummary();
 
-      toggleBtn.addEventListener("click", () => {
+      changeBtn.addEventListener("click", () => {
         if (!showingPassed) {
           const passedStudents = students.filter(
             (student) => student.score >= 50,
@@ -87,17 +87,17 @@
 
           displayStudents(passedStudents);
 
-          toggleBtn.textContent = "Show All Students";
-          toggleBtn.classList.remove("bg-blue-500", "hover:bg-blue-600");
-          toggleBtn.classList.add("bg-green-500", "hover:bg-green-600");
+          changeBtn.textContent = "Show All Students";
+          changeBtn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+          changeBtn.classList.add("bg-green-500", "hover:bg-green-600");
 
           showingPassed = true;
         } else {
           displayStudents(students);
 
-          toggleBtn.textContent = "Show Passed Students Only";
-          toggleBtn.classList.remove("bg-green-500", "hover:bg-green-600");
-          toggleBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
+          changeBtn.textContent = "Show Passed Students Only";
+          changeBtn.classList.remove("bg-green-500", "hover:bg-green-600");
+          changeBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
 
           showingPassed = false;
         }
