@@ -24,6 +24,27 @@
       </button>
 
       <p id="summary" class="mt-4 text-center font-semibold text-gray-700"></p>
+      
+      <input
+        type="text"
+        id="studentName"
+        placeholder="Enter student name"
+        class="w-full p-2 border rounded-lg mb-2"
+      />
+
+      <input
+        type="number"
+        id="studentScore"
+        placeholder="Enter student score"
+        class="w-full p-2 border rounded-lg mb-2"
+      />
+
+      <button
+        id="addStudentBtn"
+        class="w-full bg-blue-500 text-white py-2 rounded-lg mb-4"
+      >
+        Add Student
+      </button>
     </div>
 
     <script>
@@ -43,6 +64,9 @@
       const studentList = document.getElementById("studentList");
       const summary = document.getElementById("summary");
       const changeBtn = document.getElementById("changeBtn");
+      const studentName = document.getElementById("studentName");
+      const studentScore = document.getElementById("studentScore");
+      const addStudentBtn = document.getElementById("addStudentBtn");
 
       let showingPassed = false;
 
@@ -100,6 +124,26 @@
           changeBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
 
           showingPassed = false;
+        }
+      });
+
+      addStudentBtn.addEventListener("click", () => {
+        const name = studentName.value;
+        const score = studentScore.value;
+
+        if (name == "" || score == "") {
+          alert("Enter the new name and score");
+        } else {
+          students.push({
+            name: name,
+            score: score,
+          });
+
+          displayStudents(students);
+          showSummary();
+
+          studentName.value = "";
+          studentScore.value = "";
         }
       });
     </script>
