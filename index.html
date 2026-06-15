@@ -132,11 +132,10 @@
         const score = studentScore.value;
 
         if (name == "" || score == "") {
-          alert("Enter the new name and score");
         } else {
           students.push({
             name: name,
-            score: score,
+            score: number(score),
           });
 
           displayStudents(students);
