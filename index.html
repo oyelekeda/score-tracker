@@ -24,7 +24,7 @@
       </button>
 
       <p id="summary" class="mt-4 text-center font-semibold text-gray-700"></p>
-      
+
       <input
         type="text"
         id="studentName"
@@ -44,6 +44,19 @@
         class="w-full bg-blue-500 text-white py-2 rounded-lg mb-4"
       >
         Add Student
+      </button>
+
+      <input
+        type="text"
+        id="search"
+        placeholder="Search for students"
+        class="w-full p-2 border rounded-lg mb-2"
+      />
+      <button
+        id="searchBtn"
+        class="w-full bg-blue-500 text-white py-2 rounded-lg mb-4"
+      >
+        Search Student
       </button>
     </div>
 
@@ -67,6 +80,8 @@
       const studentName = document.getElementById("studentName");
       const studentScore = document.getElementById("studentScore");
       const addStudentBtn = document.getElementById("addStudentBtn");
+      const search = document.getElementById("search");
+      const searchBtn = document.getElementById("searchBtn");
 
       let showingPassed = false;
 
@@ -135,7 +150,7 @@
         } else {
           students.push({
             name: name,
-            score: number(score),
+            score: Number(score),
           });
 
           displayStudents(students);
@@ -144,6 +159,16 @@
           studentName.value = "";
           studentScore.value = "";
         }
+      });
+
+   
+
+      searchBtn.addEventListener("click", () => {
+        const searchValue = search.value.toLowerCase();
+        const filteredStudents = students.filter((student) =>
+          student.name.toLowerCase().includes(searchValue),
+        );
+        displayStudents(filteredStudents);
       });
     </script>
   </body>
