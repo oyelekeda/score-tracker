@@ -39,6 +39,8 @@
         class="w-full p-2 border rounded-lg mb-2"
       />
 
+      <p id="error" class="text-red-500 text-sm mb-2"></p>
+
       <button
         id="addStudentBtn"
         class="w-full bg-blue-500 text-white py-2 rounded-lg mb-4"
@@ -79,14 +81,24 @@
       const changeBtn = document.getElementById("changeBtn");
       const studentName = document.getElementById("studentName");
       const studentScore = document.getElementById("studentScore");
+      const error = document.getElementById("error");
       const addStudentBtn = document.getElementById("addStudentBtn");
       const search = document.getElementById("search");
       const searchBtn = document.getElementById("searchBtn");
 
       let showingPassed = false;
+      let searchTerm = "";
 
       function displayStudents(list) {
         studentList.innerHTML = "";
+
+        if (list.length === 0) {
+          const li = document.createElement("li");
+          li.textContent = "No students found.";
+          li.classList.add("p-3", "text-center", "text-gray-500");
+          studentList.appendChild(li);
+          return;
+        }
 
         list.forEach((student) => {
           const li = document.createElement("li");
@@ -108,67 +120,74 @@
       function showSummary() {
         const passed = students.filter((student) => student.score >= 50);
 
-        const names = students.map((student) => student.name);
-
-        console.log(`Students: ${names.join(", ")}`);
-
         summary.textContent = `${passed.length} out of ${students.length} students passed`;
       }
 
-      displayStudents(students);
-      showSummary();
+      function render() {
+        let list = students;
+
+        if (showingPassed) {
+          list = list.filter((student) => student.score >= 50);
+        }
+
+        if (searchTerm !== "") {
+          list = list.filter((student) =>
+            student.name.toLowerCase().includes(searchTerm),
+          );
+        }
+
+        displayStudents(list);
+        showSummary();
+      }
+
+      render();
 
       changeBtn.addEventListener("click", () => {
-        if (!showingPassed) {
-          const passedStudents = students.filter(
-            (student) => student.score >= 50,
-          );
+        showingPassed = !showingPassed;
 
-          displayStudents(passedStudents);
-
+        if (showingPassed) {
           changeBtn.textContent = "Show All Students";
           changeBtn.classList.remove("bg-blue-500", "hover:bg-blue-600");
           changeBtn.classList.add("bg-green-500", "hover:bg-green-600");
-
-          showingPassed = true;
         } else {
-          displayStudents(students);
-
           changeBtn.textContent = "Show Passed Students Only";
           changeBtn.classList.remove("bg-green-500", "hover:bg-green-600");
           changeBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
-
-          showingPassed = false;
         }
+
+        render();
       });
 
       addStudentBtn.addEventListener("click", () => {
-        const name = studentName.value;
+        const name = studentName.value.trim();
         const score = studentScore.value;
 
-        if (name == "" || score == "") {
-        } else {
-          students.push({
-            name: name,
-            score: Number(score),
-          });
-
-          displayStudents(students);
-          showSummary();
-
-          studentName.value = "";
-          studentScore.value = "";
+        if (name === "" || score === "") {
+          error.textContent = "Please enter both a name and a score.";
+          return;
         }
+
+        if (Number(score) < 0 || Number(score) > 100) {
+          error.textContent = "Score must be between 0 and 100.";
+          return;
+        }
+
+        error.textContent = "";
+
+        students.push({
+          name: name,
+          score: Number(score),
+        });
+
+        studentName.value = "";
+        studentScore.value = "";
+
+        render();
       });
 
-   
-
       searchBtn.addEventListener("click", () => {
-        const searchValue = search.value.toLowerCase();
-        const filteredStudents = students.filter((student) =>
-          student.name.toLowerCase().includes(searchValue),
-        );
-        displayStudents(filteredStudents);
+        searchTerm = search.value.trim().toLowerCase();
+        render();
       });
     </script>
   </body>
